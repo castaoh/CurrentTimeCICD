@@ -29,5 +29,5 @@ jobs:
         run: dotnet build ./CurrentTime.sln --configuration Release --no-restore
         
       - name: Publish
-        run: dotnet publish ./CurrentTime.sln --configuration Release --no-build --property:OutputPath='${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
+        run: dotnet publish ./CurrentTime.sln --configuration Release --no-build --property PublishDir='${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
         
