@@ -20,7 +20,7 @@ var summaries = new[]
 
 app.MapGet("time/utc", () => Results.Ok (DateTime.UtcNow));
 
-app.MapGet("time2/utc2", () => Results.Ok (DateTime.UtcNow));
+app.MapGet("time4/utc4", () => Results.Ok (DateTime.UtcNow));
 
 app.MapGet("/weatherforecast", () =>
 {
