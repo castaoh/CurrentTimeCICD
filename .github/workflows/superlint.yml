@@ -19,8 +19,9 @@ jobs:
       uses: actions/setup-dotnet@main
       with:
         dotnet-version: |
+              3.x.x
               8.0.x
-              3.1.2
+              
     
 
 # Run NuGet restore for each project/solution to analyze
