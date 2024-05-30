@@ -6,19 +6,27 @@ on:
   pull_request:
     branches: [ master ]
   workflow_dispatch:
-    
-
+          
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+    
 
 # Run NuGet restore for each project/solution to analyze
     - name: Run NuGet restore
       run: dotnet restore ./CurrentTime.sln
+    - name: Build
+      run: dotnet build ./CurrentTime.sln --configuration Release --no-restore
+
 
 # Run code analysis for all projects/solutions, such that code analysis violations break the build.
     - name: Run .NET Code Analysis
