@@ -37,3 +37,18 @@ jobs:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
           package: "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
+
+      - name: Azure Load Test
+        uses: Azure/pipelines@v1
+        with:
+            azure-devops-project-url: 'https://dev.azure.com/oscastan/FEVP'
+            azure-pipeline-name: 'FEVP'
+            azure-devops-token: '${{ secrets.AZURE_DEVOPS_TOKEN }}'
+
+      - name: CodeUI Test 
+        uses: Azure/pipelines@v1
+        with:
+            azure-devops-project-url: 'https://dev.azure.com/oscastan/NunitCodeUITest'
+            azure-pipeline-name: 'SDS-Release'
+            azure-devops-token: '${{ secrets.AZURE_DEVOPS_TOKEN }}'
+            
