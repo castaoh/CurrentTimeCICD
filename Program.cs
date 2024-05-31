@@ -12,7 +12,7 @@ var app = builder.Build();
 
 
 app.UseHttpsRedirection();
-string password= "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"
+
 var summaries = new[]
 {
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
