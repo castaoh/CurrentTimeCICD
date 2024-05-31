@@ -1,48 +1,56 @@
-name: .NET Code Analysis windows-latest
+name: "CodeQL"
+
 on:
   push:
-    branches:
-      - main
+    branches: [ master, develop, "feature/*", "hotfix/*", "release/*" ]
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [ develop ]
   workflow_dispatch:
     
 
 jobs:
-  sample:
-    name: .NET Code Analysis runner
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
 
-    # .NET Code Analysis runs on windows-latest.
-    # ubuntu-latest and macos-latest supporting coming soon
-    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'csharp' ]
+        # CodeQL supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python' ]
+        # Learn more:
+        # https://docs.github.com/en/free-pro-team@latest/github/finding-security-vulnerabilities-and-errors-in-your-code/configuring-code-scanning#changing-the-languages-that-are-analyzed
 
     steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
-      # Checkout your code repository to scan
-    - uses: actions/checkout@v2
-
-    # Ensure compatible versions of dotnet are installed.
-    # The [Microsoft Code Analysis CLI](https://aka.ms/mscadocs) is built with dotnet v3.1.201.
-    # A version greater than or equal to v3.1.201 of dotnet must be installed on the agent in order to run this action.
-    # Remote agents already have a compatible version of dotnet installed and this step may be skipped.
-    # For local agents, ensure dotnet version 3.1.201 or later is installed by including this action:
-    - name: Run .NET SetUp
-      uses: actions/setup-dotnet@v1
+    # Initializes the CodeQL tools for scanning.
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v2
       with:
-         dotnet-version: '3.1.x'
+        languages: ${{ matrix.language }}
+        # If you wish to specify custom queries, you can do so here or in a config file.
+        # By default, queries listed here will override any specified in a config file.
+        # Prefix the list here with "+" to use these queries and those in the config file.
+        # queries: ./path/to/local/query, your-org/your-repo/queries@main
 
-    # Run NuGet restore for the solution at repo root
-    - name: Run NuGet restore
-      run: dotnet restore
+    # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
+    # If this step fails, then you should remove it and run the build manually (see below)
+    - name: Autobuild
+      uses: github/codeql-action/autobuild@v2
 
-    # Run code analysis for the solution at repo root
-    - name: Run .NET Code Analysis
-      uses: dotnet/code-analysis@main
-      id: code-analysis
-      with:
-        build-breaking: false
+    # ℹ️ Command-line programs to run using the OS shell.
+    # 📚 https://git.io/JvXDl
 
-    # Upload the analysis results file
-    - name: Upload analysis results
-      uses: actions/upload-artifact@v2
-      with:
-        name: analysis_results.sarif
-        path: ${{ steps.code-analysis.outputs.sarifFile }}
+    # ✏️ If the Autobuild fails above, remove it and uncomment the following three lines
+    #    and modify them (or add more) to build your code if your project
+    #    uses a compiled language
+
+    #- run: |
+    #   make bootstrap
+    #   make release
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v2
