@@ -13,7 +13,7 @@ var app = builder.Build();
 
 app.UseHttpsRedirection();
 
-string mypassword="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"
+string mypassword="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";
 
 var summaries = new[]
 {
